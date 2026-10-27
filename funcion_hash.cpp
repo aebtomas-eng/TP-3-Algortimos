@@ -2,10 +2,15 @@
 
 size_t funcion_hash(const std::string& clave) {
     // COMPLETAR
-    return 0;
+    int suma = 0;
+    for (char c : clave) {
+        suma += c;
+    }
+    return suma % tabla.capacidad();
 }
 
 size_t funcion_hash(int clave) {
     // COMPLETAR
-    return 0;
+    
+    return clave % tabla.capacidad();
 }

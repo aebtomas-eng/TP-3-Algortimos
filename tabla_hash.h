@@ -1,5 +1,7 @@
 #ifndef TABLA_HASH_H
 #define TABLA_HASH_H
+#include <vector>
+using namespace std;
 
 #include <cstddef>
 
@@ -26,6 +28,8 @@ class TablaHash {
     // COMPLETAR: la representacion la eligen ustedes (que guardan, y que hay
     // en cada bucket). Pueden agregar tambien funciones auxiliares privadas.
     // Lo que el Iterador necesite de aca tiene que estar declarado antes que el.
+    int capacidad = 0;
+    vector<size_t> header;
 
   public:
     static const size_t FACTOR_DE_CARGA_MAXIMO = 2;
@@ -101,7 +105,7 @@ class TablaHash {
         // Costo: O(1).
         K clave() {
             // COMPLETAR (reemplazar la linea de abajo)
-            return K();
+            return ;
         }
 
         // Pre:  hay_mas().
@@ -135,6 +139,7 @@ class TablaHash {
 template <typename K, typename V>
 TablaHash<K, V>::TablaHash(size_t capacidad_inicial) {
     // COMPLETAR
+    header = vector<size_t> pio(capacidad_inicial);
 }
 
 template <typename K, typename V>
@@ -167,7 +172,7 @@ size_t TablaHash<K, V>::cantidad() {
 template <typename K, typename V>
 size_t TablaHash<K, V>::capacidad() {
     // COMPLETAR
-    return 0;
+    return TablaHash.capacidad;
 }
 
 template <typename K, typename V>
