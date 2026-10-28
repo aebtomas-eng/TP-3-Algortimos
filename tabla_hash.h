@@ -22,14 +22,21 @@ using namespace std;
 // Complejidades: n es la cantidad de claves guardadas y c la capacidad.
 // "Promedio" supone que la funcion de hash reparte las claves de manera
 // uniforme y que calcularla (y comparar dos claves) cuesta O(1).
+
 template <typename K, typename V>
 class TablaHash {
   private:
     // COMPLETAR: la representacion la eligen ustedes (que guardan, y que hay
     // en cada bucket). Pueden agregar tambien funciones auxiliares privadas.
     // Lo que el Iterador necesite de aca tiene que estar declarado antes que el.
-    int capacidad = 0;
-    vector<size_t> header;
+struct Node {
+    Node(const K& c, const V& v) : clave(c), valor(v), next(nullptr) {}
+    K clave;
+    V valor;
+    Node* next;
+};
+    int c=0;
+    vector<Node*> buckets;
 
   public:
     static const size_t FACTOR_DE_CARGA_MAXIMO = 2;
@@ -87,17 +94,20 @@ class TablaHash {
       private:
         // COMPLETAR: la representacion la eligen ustedes. Desde aca se puede
         // usar la parte privada de la tabla.
-
         // Para que crear_iterador() pueda armar el iterador.
+        int indice = 0;
+        Node* actual;
+        TablaHash* tabla_it;        
         friend class TablaHash;
-
-      public:
+        
+        public:
         // Pre:  -
         // Post: indica si quedan pares por recorrer.
         // Costo: O(1).
         bool hay_mas() {
             // COMPLETAR
-            return false;
+            if (indice>= tabla_it->c && actual==nullptr) return false;
+            return true;
         }
 
         // Pre:  hay_mas().
@@ -105,7 +115,7 @@ class TablaHash {
         // Costo: O(1).
         K clave() {
             // COMPLETAR (reemplazar la linea de abajo)
-            return ;
+            return actual->clave;
         }
 
         // Pre:  hay_mas().
@@ -113,7 +123,7 @@ class TablaHash {
         // Costo: O(1).
         V valor() {
             // COMPLETAR (reemplazar la linea de abajo)
-            return V();
+            return actual->valor;
         }
 
         // Pre:  hay_mas().
@@ -121,7 +131,12 @@ class TablaHash {
         // Costo: O(c) en peor caso. Recorrer la tabla entera (crear el
         //        iterador y avanzar hasta el final) cuesta O(n + c).
         void avanzar() {
-            // COMPLETAR
+        if (actual == nullptr){
+            indice++;
+            actual=tabla_it->buckets[indice];
+            return;
+        }
+        actual=actual->next;   
         }
     };
 
@@ -129,7 +144,8 @@ class TablaHash {
     // Post: devuelve un iterador al primer par de la tabla (si la tabla esta
     //       vacia, el iterador ya esta al final).
     // Costo: O(c) en peor caso.
-    Iterador crear_iterador();
+    Iterador crear_iterador(TablaHash* tabla);
+
 };
 
 // ---------------------------------------------------------------------------
@@ -139,22 +155,91 @@ class TablaHash {
 template <typename K, typename V>
 TablaHash<K, V>::TablaHash(size_t capacidad_inicial) {
     // COMPLETAR
-    header = vector<size_t> pio(capacidad_inicial);
+    buckets.resize(capacidad_inicial);
+    c=capacidad_inicial;
 }
 
 template <typename K, typename V>
 TablaHash<K, V>::~TablaHash() {
     // COMPLETAR
+    Iterador it = crear_iterador();
+    while (it.hay_mas()){
+        if (it.actual==nullptr){
+            it.avanzar();
+            continue;
+        }
+        Nodo* borrar = it.actual;
+        it.avanzar();
+        delete borrar;
+    }
+    delete[] buckets;
+    
 }
 
 template <typename K, typename V>
 void TablaHash<K, V>::insertar(const K& clave, const V& valor) {
     // COMPLETAR
+    indice = funcion_hash(clave);
+    actual = buckets[indice]; //Por que no me deja llamar actual!!
+    if (actual == nullptr)
+    {
+        Node* nuevo = new Node(valor);
+        nuevo->clave = clave;
+        buckets[indice]=nuevo;
+        cantidad++;
+        
+    }
+    while (actual->sig != nullptr)
+    {
+        if (actual->clave==clave)
+        {
+            actual->valor++;
+        }
+        actual=actual->sig;
+    }
+    if (actual->clave == clave)
+    {
+        actual->valor++;
+    }
+    Node* nuevo = new Node(valor);
+    nuevo->clave = clave;
+    actual->next = nuevo;
+    cantidad++;
+    if (cantidad/c >= FACTOR_DE_CARGA_MAXIMO)
+    {
+    vector<Node*> nuevo_bucket;
+    nuevo_bucket.resize(c*2);
+    Iterador iter = crear_iterador();
+    while (iter.hay_mas())
+    { 
+        if (actual ==nullptr)
+        {
+            continue;
+        }
+        indice = funcion_hash(actual->clave);
+        while (actual->next)
+        {
+            /* code */
+        }
+        
+
+        iter.avanzar();
+
+    }
+    
+
+
+
+
+
+    }
+    
 }
 
 template <typename K, typename V>
 void TablaHash<K, V>::eliminar(const K& clave) {
     // COMPLETAR
+
 }
 
 template <typename K, typename V>
@@ -172,7 +257,7 @@ size_t TablaHash<K, V>::cantidad() {
 template <typename K, typename V>
 size_t TablaHash<K, V>::capacidad() {
     // COMPLETAR
-    return TablaHash.capacidad;
+    return TablaHash->capacidad;
 }
 
 template <typename K, typename V>
@@ -183,9 +268,11 @@ size_t TablaHash<K, V>::colisiones() {
 
 // El "typename" le avisa al compilador que TablaHash<K, V>::Iterador es un tipo.
 template <typename K, typename V>
-typename TablaHash<K, V>::Iterador TablaHash<K, V>::crear_iterador() {
+typename TablaHash<K, V>::Iterador TablaHash<K, V>::crear_iterador(TablaHash* tabla) {
     Iterador it;
     // COMPLETAR
+    it.tabla_it = tabla;
+    it.actual = tabla->buckets[it.indice];
     return it;
 }
 
