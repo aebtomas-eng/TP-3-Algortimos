@@ -18,8 +18,19 @@ using namespace std;
 //
 // Invariante de representacion:
 //   COMPLETAR: escriban aca el invariante de la representacion que elijan.
-//.  
-//
+//    .La lista de buckets es un vector de nodos
+//    .Cada Nodo guarda tres elementos: (clave,valor,next)
+//      Clave es de tipo K, Valor es tipo V y next es un puntero a el siguiente nodo o nullptr
+//    .Buckets.size() = capacidad
+//    .Capacidad >=1
+//    .cant <= FACTOR_DE_CARGA_MAXIMO * cap
+//    .Cada nodo esta el bucket[funcion_hash(nodo->clave)%cap]
+//    .Si un nodo es el ultimo de su bucket, entonces su next sera nullptr (no hay ciclos)
+//    .Todo nodo insertado es un elemento del vector o un hijo de otro nodo
+//    .Cada nodo tiene a lo sumo un hijo
+//    .No hay claves repetidas
+//    
+//  
 // Complejidades: n es la cantidad de claves guardadas y c la capacidad.
 // "Promedio" supone que la funcion de hash reparte las claves de manera
 // uniforme y que calcularla (y comparar dos claves) cuesta O(1).
@@ -94,13 +105,20 @@ class TablaHash {
     //
     // Invariante de representacion:
     //   COMPLETAR: escriban aca el invariante de la representacion que elijan.
+    //   .Cada iterador tiene 3 atributos:
+    //      un indice que es size t, un puntero al nodo actual, un puntero a la tablahash
+    //   .El puntero siempre apunta a la tabla que llamo crear_iterador
+    //   .Si indice == capacidad, el recorrido termino pq el vector va desde 0 hasta cap-1
+    //      entonces hay_mas() = false
+    //   .Si indice < capacidad, entonces actual apunta a un nodo(!nullptr) del bucket[indice]
+    
     class Iterador {
       private:
         // COMPLETAR: la representacion la eligen ustedes. Desde aca se puede
         // usar la parte privada de la tabla.
         // Para que crear_iterador() pueda armar el iterador.
         size_t indice = 0;
-        Node* actual;
+        Node* actual = nullptr;
         TablaHash* tabla_it;        
         friend class TablaHash;
         
@@ -216,7 +234,7 @@ template <typename K, typename V>
 void TablaHash<K, V>::insertar(const K& clave, const V& valor) {
     // COMPLETAR
     size_t indice = funcion_hash(clave) % cap;
-    Node* actual = nullptr;
+    Node* actual = buckets[indice];
     Node* nuevo = new Node(clave, valor);
     if (actual != nullptr)
     {
@@ -325,7 +343,7 @@ typename TablaHash<K, V>::Iterador TablaHash<K, V>::crear_iterador()
         it.tabla_it = this;
         if (this->cantidad() == 0)
         {
-            it.indice = this->capacidad() + 1;
+            it.indice = this->capacidad();
             return it;
         }
         Node* primero = this->buckets[0];
