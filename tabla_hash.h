@@ -47,7 +47,7 @@ class TablaHash {
       V valor;
       Node* next;
     };
-    void redimensionar_la_wea();
+    void redimensionar();
     size_t cap=0;
     size_t cant=0;
     vector<Node*> buckets;
@@ -87,12 +87,16 @@ class TablaHash {
     // Costo: O(1) en promedio, O(n) en peor caso.
     V* buscar(const K& clave);
 
-    // Post: devuelve la cantidad de claves guardadas. Costo: O(1).
+    //Pre: -
+    // Post: devuelve la cantidad de claves guardadas. 
+    //Costo: O(1).
     size_t cantidad();
-
-    // Post: devuelve la cantidad de buckets. Costo: O(1).
+    //Pre: -
+    // Post: devuelve la cantidad de buckets. 
+    //Costo: O(1).
     size_t capacidad();
 
+    //Pre: -
     // Post: devuelve la cantidad de claves que comparten bucket con alguna
     //       clave que llego antes, es decir:
     //       cantidad() - (cantidad de buckets que no estan vacios).
@@ -191,14 +195,14 @@ TablaHash<K, V>::~TablaHash() {
     // COMPLETAR
     Iterador it = crear_iterador();
     while (it.hay_mas()){
-        Node* LaVenganzaContraLaxDelNoditoAuxiliarLindoAhoraCriminal = it.actual;
+        Node* viejo = it.actual;
         it.avanzar();
-        delete LaVenganzaContraLaxDelNoditoAuxiliarLindoAhoraCriminal;
+        delete viejo;
     }
 }
 
 template <typename K, typename V>
-void TablaHash<K, V>::redimensionar_la_wea() {
+void TablaHash<K, V>::redimensionar() {
     size_t nueva_cap = cap*2;
     vector<Node*> baldes;
     baldes.resize(nueva_cap);
@@ -241,7 +245,7 @@ void TablaHash<K, V>::insertar(const K& clave, const V& valor) {
     }
     cant++;
     if (cant > FACTOR_DE_CARGA_MAXIMO*cap){
-        redimensionar_la_wea();
+        redimensionar();
     }
 }
 

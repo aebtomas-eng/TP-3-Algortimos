@@ -9,13 +9,16 @@ Goleadores::Goleadores() {
 void Goleadores::anotar_gol(const std::string& jugador) {
     // COMPLETAR
     int goles = 0;
-    int goles_maximos = goles_por_jugador.obtener(maximo);
     if(goles_por_jugador.pertenece(jugador)){
         goles = goles_por_jugador.obtener(jugador) +1;
     }
-    else goles = 1;
+    else goles = 1; 
+    goles_por_jugador.insertar(jugador, goles);
     if (goles_por_jugador.cantidad() ==1) maximo = jugador;
-    else if (goles>goles_maximos) maximo = jugador;
+    else{
+        int goles_maximos = goles_por_jugador.obtener(maximo);
+        if (goles>goles_maximos) maximo = jugador;
+    } 
 }
 
 int Goleadores::goles(const std::string& jugador) {

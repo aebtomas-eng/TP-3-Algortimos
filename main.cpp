@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-
+using namespace std
 #include "goleadores.h"
 
 // Cambiar a true si hicieron la parte optativa (los dos listados).
@@ -12,14 +12,18 @@ const bool CON_LISTADOS = false;
 // Uso: ./goleadores < datos/ejemplo.txt
 int main() {
     // COMPLETAR: crear la estructura donde se van a cargar los goles.
-
+    Goleadores g 
     std::string jugador;
     while (std::getline(std::cin, jugador)) {
         if (jugador != "") {
-            // En este punto, jugador tiene el nombre de quien hizo el gol.
-            // COMPLETAR: anotarle el gol.
+        // En este punto, jugador tiene el nombre de quien hizo el gol.
+        // COMPLETAR: anotarle el gol.
+           g.anotar_gol(jugador);
         }
     }
+    cout << 'Jugadores con goles:' << g.cantidad_de_jugadores() <<endl;
+    cout << 'Maximo goleador :' << g.maximo_goleador() ' ('<< g.goles(maximo)<< 'goles)'  <<endl;
+            
 
     // COMPLETAR: imprimir, con el formato del enunciado, la cantidad de
     // jugadores con goles y el maximo goleador (con sus goles).

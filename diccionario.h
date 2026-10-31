@@ -27,7 +27,6 @@ class Diccionario {
     // Post: crea un diccionario vacio.
     // Costo: O(1).
     Diccionario();
-    tabla
     // Pre:  -
     // Post: el diccionario asocia clave -> valor (si la clave ya estaba, se
     //       reemplaza su valor anterior).
@@ -72,7 +71,7 @@ class Diccionario {
         // Costo: O(1).
         bool hay_mas() {
             // COMPLETAR
-            return de_la_tabla->hay_mas();
+            return de_la_tabla.hay_mas();
         }
 
         // Pre:  hay_mas().
