@@ -8,21 +8,30 @@ Goleadores::Goleadores() {
 
 void Goleadores::anotar_gol(const std::string& jugador) {
     // COMPLETAR
+    int goles = 0;
+    int goles_maximos = goles_por_jugador.obtener(maximo);
+    if(goles_por_jugador.pertenece(jugador)){
+        goles = goles_por_jugador.obtener(jugador) +1;
+    }
+    else goles = 1;
+    if (goles_por_jugador.cantidad() ==1) maximo = jugador;
+    else if (goles>goles_maximos) maximo = jugador;
 }
 
 int Goleadores::goles(const std::string& jugador) {
     // COMPLETAR
-    return 0;
+    if(!goles_por_jugador.pertenece(jugador)) return 0;
+    return goles_por_jugador.obtener(jugador);
 }
 
 size_t Goleadores::cantidad_de_jugadores() {
     // COMPLETAR
-    return 0;
+    return goles_por_jugador.cantidad();
 }
 
 std::string Goleadores::maximo_goleador() {
     // COMPLETAR
-    return "";
+    return maximo;
 }
 
 void Goleadores::imprimir_por_nombre() {

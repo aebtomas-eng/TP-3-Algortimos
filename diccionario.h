@@ -18,8 +18,8 @@
 template <typename K, typename V>
 class Diccionario {
   private:
+  
     static const size_t CAPACIDAD_INICIAL = 8;
-
     TablaHash<K, V> tabla;
 
   public:
@@ -27,7 +27,7 @@ class Diccionario {
     // Post: crea un diccionario vacio.
     // Costo: O(1).
     Diccionario();
-
+    tabla
     // Pre:  -
     // Post: el diccionario asocia clave -> valor (si la clave ya estaba, se
     //       reemplaza su valor anterior).
@@ -72,7 +72,7 @@ class Diccionario {
         // Costo: O(1).
         bool hay_mas() {
             // COMPLETAR
-            return false;
+            return de_la_tabla->hay_mas();
         }
 
         // Pre:  hay_mas().
@@ -80,7 +80,7 @@ class Diccionario {
         // Costo: O(1).
         K clave() {
             // COMPLETAR (reemplazar la linea de abajo)
-            return K();
+            return de_la_tabla.clave();
         }
 
         // Pre:  hay_mas().
@@ -89,7 +89,7 @@ class Diccionario {
         // Costo: O(1).
         V valor() {
             // COMPLETAR (reemplazar la linea de abajo)
-            return V();
+            return de_la_tabla.valor();
         }
 
         // Pre:  hay_mas().
@@ -98,6 +98,7 @@ class Diccionario {
         //        O(n + c).
         void avanzar() {
             // COMPLETAR
+            de_la_tabla.avanzar();
         }
     };
 
@@ -116,29 +117,33 @@ Diccionario<K, V>::Diccionario() : tabla(CAPACIDAD_INICIAL) {
 template <typename K, typename V>
 void Diccionario<K, V>::insertar(const K& clave, const V& valor) {
     // COMPLETAR
+    if (tabla.buscar(clave) != nullptr) tabla.eliminar(clave); //insertar no acepta claves repetidas
+    tabla.insertar(clave,valor);
 }
 
 template <typename K, typename V>
 bool Diccionario<K, V>::pertenece(const K& clave) {
     // COMPLETAR
+    if (tabla.buscar(clave)!=nullptr) return true;
     return false;
 }
 
 template <typename K, typename V>
 V Diccionario<K, V>::obtener(const K& clave) {
     // COMPLETAR
-    return V();
+    return *tabla.buscar(clave); //buscar devueleve puntero
 }
 
 template <typename K, typename V>
 void Diccionario<K, V>::eliminar(const K& clave) {
     // COMPLETAR
+    tabla.eliminar(clave);
 }
 
 template <typename K, typename V>
 size_t Diccionario<K, V>::cantidad() {
     // COMPLETAR
-    return 0;
+    return tabla.cantidad();
 }
 
 // El "typename" le avisa al compilador que Diccionario<K, V>::Iterador es un
@@ -147,6 +152,7 @@ template <typename K, typename V>
 typename Diccionario<K, V>::Iterador Diccionario<K, V>::crear_iterador() {
     Iterador it;
     // COMPLETAR
+    it.de_la_tabla = tabla.crear_iterador();
     return it;
 }
 

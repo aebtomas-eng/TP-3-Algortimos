@@ -59,7 +59,7 @@ class TablaHash {
     // Post: crea una tabla vacia, con capacidad_inicial buckets.
     // Costo: O(capacidad_inicial).
     TablaHash(size_t capacidad_inicial);
-
+    //Pre: -
     // Post: libera toda la memoria pedida por la tabla.
     // Costo: O(n + c) en peor caso.
     ~TablaHash();
@@ -153,15 +153,12 @@ class TablaHash {
         // Costo: O(c) en peor caso. Recorrer la tabla entera (crear el
         //        iterador y avanzar hasta el final) cuesta O(n + c).
         void avanzar() {
-            if (actual->next==nullptr)
-            {
+            if (actual->next==nullptr){
                 indice++;
-                while (indice < tabla_it->capacidad() && tabla_it->buckets[indice] == nullptr)
-                {
+                while (indice < tabla_it->capacidad() && tabla_it->buckets[indice] == nullptr){
                     indice++;
                 }
-                if (indice< tabla_it->capacidad())
-                {
+                if (indice< tabla_it->capacidad()){
                     actual = tabla_it->buckets[indice];
                 }
                 return;
@@ -210,14 +207,11 @@ void TablaHash<K, V>::redimensionar_la_wea() {
     {
         size_t indice = funcion_hash(it.actual->clave) % nueva_cap;
         Node* posicion = baldes[indice];
-        if (posicion == nullptr)
-        {
+        if (posicion == nullptr){
             baldes[indice] = it.actual;
-        }
-        else
-        {
-            while (posicion->next!=nullptr)
-            {
+        }   
+        else{
+            while (posicion->next!=nullptr){
                 posicion = posicion->next;
             }
             posicion->next=it.actual;
@@ -236,21 +230,17 @@ void TablaHash<K, V>::insertar(const K& clave, const V& valor) {
     size_t indice = funcion_hash(clave) % cap;
     Node* actual = buckets[indice];
     Node* nuevo = new Node(clave, valor);
-    if (actual != nullptr)
-    {
-    while (actual->next!=nullptr)
-    {
+    if (actual != nullptr){
+    while (actual->next!=nullptr){
         actual = actual->next;
     }
     actual->next = nuevo;
     }
-    else
-    {
+    else{
         buckets[indice]=nuevo;
     }
     cant++;
-    if (cant > FACTOR_DE_CARGA_MAXIMO*cap)
-    {
+    if (cant > FACTOR_DE_CARGA_MAXIMO*cap){
         redimensionar_la_wea();
     }
 }
@@ -260,19 +250,16 @@ void TablaHash<K, V>::eliminar(const K& clave) {
     // COMPLETAR
     size_t indice = funcion_hash(clave) % cap;
     Node* actual = buckets[indice];
-    if (actual->clave == clave)
-    {
+    if (actual->clave == clave){
         buckets[indice] = actual->next;
         delete actual;
         cant--;
         return;
     }
-    while (actual->next != nullptr)
-    {
+    while (actual->next != nullptr){
         Node* viejo = actual;
         actual = actual->next;
-        if (actual->clave == clave)
-        {
+        if (actual->clave == clave){
             viejo->next = actual->next;
             delete actual;
             cant--;
@@ -286,23 +273,18 @@ V* TablaHash<K, V>::buscar(const K& clave) {
     // COMPLETAR
     size_t indice = funcion_hash(clave) % cap;
     Node* actual = buckets[indice];
-    if (actual == nullptr)
-    {
+    if (actual == nullptr){
         return nullptr;
     }
-    while (actual->next != nullptr)
-    {
-        if (actual->clave == clave)
-        {
+    while (actual->next != nullptr){
+        if (actual->clave == clave){
             return &actual->valor;
         }
-        else
-        {
+        else{
             actual = actual->next;
         }
     }
-    if (actual->clave == clave)
-    {
+    if (actual->clave == clave){
         return &actual->valor;
     }
     
@@ -325,8 +307,7 @@ template <typename K, typename V>
 size_t TablaHash<K, V>::colisiones() {
     // COMPLETAR
     size_t no_vacios = 0;
-    for (size_t i = 0; i < cap; i++)
-    {
+    for (size_t i = 0; i < cap; i++){
        if (buckets[i] != nullptr)
        {
         no_vacios++;
