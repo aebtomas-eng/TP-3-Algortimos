@@ -44,4 +44,11 @@ Con 117 claves y 64 buckets hubieron:
 |Funcion_hash_con_memoria    | 64       |
 |Funcion_hash_horrible       | 116      |
 |---------------------------------------|
+
+-> Elegimos la funcion funcion_hash_con_memoria. En nuestros datos empato con la basica, pero la con memoria tiene en cuenta el orden de las letras. Gracias a esta propiedad, reducimos la posibilidad de colisiones. Se ve, por supesto, que la peor funcion es la funcion: Funcion_hash_horrible.
+En las funciones de hash malas vemos que las claves qe colisionan tienen esto en comun
+ - En la horrible todas tienen el mismo hash asi que siempre caen el el bucket 0 sin importar el nombre
+ - En la basica, colisionan las claves cuyas sumas de caracteres (en ASCII) da el mismo resto mod cap. En particular, los anagrmas tienen el mismo hash.
+En nuestro trabajo, todo esta realizado con potencias par y no vemos que esto afecte que tan bueno/malo sea el hash. 
 */
+
