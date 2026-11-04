@@ -36,3 +36,12 @@ int main() {
 
     return 0;
 }
+/*
+Con 117 claves y 64 buckets hubieron:
+|---------------------------------------|
+|                            |Colisiones|
+|Funcion_hash_basica.        | 64       |
+|Funcion_hash_con_memoria    | 64       |
+|Funcion_hash_horrible       | 116      |
+|---------------------------------------|
+*/
