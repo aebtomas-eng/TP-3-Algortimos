@@ -1,6 +1,6 @@
 #include "funcion_hash.h"
 
-size_t funcion_hash(const std::string& clave) {
+size_t funcion_hash_basica(const std::string& clave) {
     // COMPLETAR
     size_t suma = 0;
     for (char c : clave) {
